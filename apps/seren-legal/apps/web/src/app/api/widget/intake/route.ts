@@ -1,18 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
-
-export async function OPTIONS() {
-  return new NextResponse(null, { status: 204, headers: corsHeaders });
-}
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { getTenantBySlug } from "@/lib/tenant";
 import { summarizeIntake } from "@/lib/ai";
+import { widgetLimiter, getClientIp } from "@/lib/rate-limit";
+
+/**
+ * Build CORS headers. In production, restrict to tenant's configured origins.
+ */
+function corsHeaders(tenantOrigins?: string | null): Record<string, string> {
+  const origin = tenantOrigins || "*";
+  return {
+    "Access-Control-Allow-Origin": origin,
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
+}
+
+export async function OPTIONS(request: NextRequest) {
+  // For OPTIONS, use permissive CORS (we don't have the tenant slug yet)
+  return new NextResponse(null, { status: 204, headers: corsHeaders() });
+}
 
 const BOT_GREETING =
   "Hello! I'm Seren's intake assistant. Briefly describe your legal matter and we'll connect you with the right attorney.";
@@ -32,15 +40,30 @@ const bodySchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  // ── Rate limit by IP ──
+  const ip = getClientIp(request);
+  const { success: allowed } = widgetLimiter.check(ip);
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "Too many requests. Please wait a moment." },
+      { status: 429, headers: corsHeaders() }
+    );
+  }
+
   try {
     const body = bodySchema.parse(await request.json());
     const tenant = await getTenantBySlug(body.firmSlug);
     if (!tenant) {
       return NextResponse.json(
         { error: "Firm not found" },
-        { status: 404, headers: corsHeaders }
+        { status: 404, headers: corsHeaders() }
       );
     }
+
+    // Use tenant-configured allowed origins if available
+    const settings = tenant.settings as Record<string, unknown> | null;
+    const allowedOrigins = (settings?.widgetOrigins as string) ?? null;
+    const headers = corsHeaders(allowedOrigins);
 
     const intakeForm = await prisma.intakeForm.findFirst({
       where: { tenantId: tenant.id, isActive: true },
@@ -156,19 +179,19 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { sessionId: session.id, reply, complete, leadId },
-      { headers: corsHeaders }
+      { headers }
     );
   } catch (e) {
     if (e instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Invalid input" },
-        { status: 400, headers: corsHeaders }
+        { status: 400, headers: corsHeaders() }
       );
     }
     console.error("widget intake error:", e);
     return NextResponse.json(
       { error: "Intake failed" },
-      { status: 500, headers: corsHeaders }
+      { status: 500, headers: corsHeaders() }
     );
   }
 }

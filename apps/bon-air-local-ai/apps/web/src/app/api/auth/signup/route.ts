@@ -9,6 +9,7 @@ import {
 } from "@/lib/auth";
 import { jsonError, jsonOk } from "@/lib/api";
 import { slugify } from "@/lib/utils";
+import { signupLimiter, getClientIp } from "@/lib/rate-limit";
 
 const schema = z.object({
   email: z.string().email(),
@@ -18,6 +19,13 @@ const schema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  // ── Rate limit ──
+  const ip = getClientIp(request);
+  const { success: allowed } = signupLimiter.check(ip);
+  if (!allowed) {
+    return jsonError("Too many signup attempts. Try again later.", 429);
+  }
+
   try {
     const body = schema.parse(await request.json());
     const existing = await prisma.user.findUnique({

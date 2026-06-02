@@ -1,0 +1,24 @@
+{
+  "name": "bonair",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/bon-air-local-ai/apps/web",
+    "apps/seren-legal/apps/web"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "db:generate": "turbo run db:generate",
+    "db:push": "turbo run db:push",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.4"
+  },
+  "packageManager": "npm@10.8.2",
+  "engines": {
+    "node": ">=20"
+  }
+}
