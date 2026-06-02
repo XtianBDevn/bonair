@@ -1,0 +1,36 @@
+---
+description: Bon Air Media monorepo layout, submodules, and GitHub workflow
+alwaysApply: true
+---
+
+# Bon Air Media monorepo
+
+You are working in the **bonair** umbrella repository (`XtianBDevn/bonair`).
+
+## Structure
+
+- `apps/bon-air-local-ai/` — Local SEO SaaS (Next.js, root `apps/web`)
+- `apps/seren-legal/` — Legal CRM (Next.js, root `apps/web`)
+- `saas/` — **submodule** → `bon-air-ai` (.NET + Next.js)
+- `sites/bonairmedia.com/` — **submodule** → `bonairmedia` (marketing site)
+- `shared/python-webscraper/` — **submodule** → `bon-air-media-scraper`
+
+Read `PROJECTS.md` for paths, remotes, and deploy targets.
+
+## Git rules
+
+- Do not commit `.env`, secrets, `node_modules/`, or `venv/`.
+- Changes under a submodule path require a commit **in that submodule repo**, then a parent commit that bumps the submodule SHA.
+- Prefer focused commits; match existing message style (`Add:`, `Fix:`, `Update:`).
+- Default branch: `main`.
+
+## Code conventions
+
+- Next.js apps: TypeScript, App Router, Tailwind; env in `.env.local` (never commit).
+- Match naming and patterns in the nearest sibling files before adding abstractions.
+- Shared Python tooling: install with `pip install -e shared/python-webscraper` from app venvs.
+
+## When unsure
+
+- Check the project’s own `README.md` and `docs/` before inventing structure.
+- SaaS deployment: `saas/docs/DEPLOYMENT.md`.

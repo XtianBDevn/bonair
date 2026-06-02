@@ -1,0 +1,12 @@
+[submodule "saas"]
+	path = saas
+	url = https://github.com/XtianBDevn/bon-air-ai.git
+	branch = main
+[submodule "sites/bonairmedia.com"]
+	path = sites/bonairmedia.com
+	url = https://github.com/XtianBDevn/bonairmedia.git
+	branch = main
+[submodule "shared/python-webscraper"]
+	path = shared/python-webscraper
+	url = https://github.com/XtianBDevn/bon-air-media-scraper.git
+	branch = main

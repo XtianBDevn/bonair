@@ -1,0 +1,18 @@
+{
+  "folders": [
+    { "name": "bonair (root)", "path": "." },
+    { "name": "bon-air-local-ai", "path": "apps/bon-air-local-ai" },
+    { "name": "seren-legal", "path": "apps/seren-legal" },
+    { "name": "campaigns-saas", "path": "saas" },
+    { "name": "bonairmedia.com", "path": "sites/bonairmedia.com" },
+    { "name": "python-webscraper", "path": "shared/python-webscraper" }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/.next": true,
+      "**/venv": true,
+      "**/__pycache__": true
+    }
+  }
+}
