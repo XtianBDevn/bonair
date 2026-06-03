@@ -1,55 +1,68 @@
 # Bon Air Media — Project Index
 
-Central map for this monorepo. Open the folder in **Cursor**; GitHub remote is [`XtianBDevn/bonair`](https://github.com/XtianBDevn/bonair).
+Umbrella monorepo: **[XtianBDevn/bonair](https://github.com/XtianBDevn/bonair)**. Each product below is its own Git repo, linked here as a **submodule**.
 
-## Layout
+## Products (submodules)
 
-| Path | Product | Stack | GitHub | Deploy |
-|------|---------|-------|--------|--------|
-| `saas/` | Bon Air Campaigns (AI campaigns) | .NET API + Next.js | [bon-air-ai](https://github.com/XtianBDevn/bon-air-ai) | Railway (API), Vercel (web) |
-| `apps/bon-air-local-ai/` | Local SEO / GBP / geo pages | Next.js + Prisma | *(this repo)* | Vercel (`apps/web`) |
-| `apps/seren-legal/` | Seren Legal CRM / intake | Next.js + Prisma | [seren-law](https://github.com/XtianBDevn/seren-law) *(private, may diverge)* | Vercel (`apps/web`) |
-| `sites/bonairmedia.com/` | Company marketing site | Next.js + GSAP / Three.js | [bonairmedia](https://github.com/XtianBDevn/bonairmedia) | Vercel |
-| `shared/python-webscraper/` | Shared scraper library | Python | [bon-air-media-scraper](https://github.com/XtianBDevn/bon-air-media-scraper) | pip install -e |
+| Path | Product | Stack | GitHub | Dev port |
+|------|---------|-------|--------|----------|
+| `saas/` | Bon Air Campaigns | .NET API + Next.js | [bon-air-ai](https://github.com/XtianBDevn/bon-air-ai) | 3000 (web) |
+| `apps/bon-air-local-ai/` | Bon Air Local AI (SEO / GBP / geo) | Next.js + Prisma | [bon-air-local-ai](https://github.com/XtianBDevn/bon-air-local-ai) | 3001 |
+| `apps/seren-legal/` | Seren Legal CRM / intake | Next.js + Prisma | [seren-law](https://github.com/XtianBDevn/seren-law) | 3002 |
+| `sites/bonairmedia.com/` | Company marketing site | Next.js + GSAP | [bonairmedia](https://github.com/XtianBDevn/bonairmedia) | 3003 |
 
-## Submodules
+## Shared (in umbrella repo)
 
-These three paths are **git submodules** (separate repos, pinned commits in `bonair`):
+| Path | Purpose |
+|------|---------|
+| `shared/ts-lib/` | `@bon-air/ts-lib` — auth, Stripe, Prisma helpers for Next apps |
+| `shared/python-webscraper/` | Python scraper ([bon-air-media-scraper](https://github.com/XtianBDevn/bon-air-media-scraper) submodule) |
+
+## Clone
 
 ```bash
-git submodule update --init --recursive   # first clone
-git submodule update --remote saas        # optional: advance submodule to latest main
+git clone --recurse-submodules https://github.com/XtianBDevn/bonair.git
+cd bonair
+git submodule update --init --recursive
+npm install   # Turborepo workspaces (ts-lib + both Next apps)
 ```
 
-## Quick start (per project)
+## Quick start
 
 ```bash
-# SaaS (see saas/README.md)
+# From repo root (Turborepo)
+npm run dev:local-ai    # http://localhost:3001
+npm run dev:seren       # http://localhost:3002
+
+# Campaigns SaaS
 cd saas && docker compose up -d
 
-# Bon Air Local AI
-cd apps/bon-air-local-ai/apps/web && npm install && npm run dev
+# Marketing site (submodule)
+cd sites/bonairmedia.com && npm install && npm run dev   # :3003
 
-# Seren Legal
-cd apps/seren-legal/apps/web && npm install && npm run dev
-
-# Company site
-cd sites/bonairmedia.com && npm install && npm run dev
-
-# Scraper
-cd shared/python-webscraper && pip install -e .
+# DB (per product — see each app's infra/docker-compose.yml)
+npm run db:migrate
+npm run db:seed
+npm run test:e2e
 ```
 
-## Related GitHub repos (not in this tree)
+## Submodule workflow
+
+1. Change code inside the product directory (e.g. `apps/seren-legal/`).
+2. Commit and push **in that product repo**.
+3. In `bonair`, commit the updated submodule SHA only.
+
+```bash
+cd apps/seren-legal
+git add . && git commit -m "Your message" && git push
+cd ../..
+git add apps/seren-legal
+git commit -m "Bump seren-legal submodule"
+```
+
+## Related repos (not in this tree)
 
 | Repo | Notes |
 |------|--------|
-| [seren-law](https://github.com/XtianBDevn/seren-law) | May mirror `apps/seren-legal` |
-| [serenauth](https://github.com/XtianBDevn/serenauth) | Prior auth product |
+| [serenauth](https://github.com/XtianBDevn/serenauth) | Prior auth product (separate) |
 | Client sites | `phillysteakandgyro`, `Herlongs-Tree-Service`, etc. |
-
-## Workflow
-
-1. **Cursor** — work at repo root; rules in `.cursor/rules/`.
-2. **GitHub** — push `bonair` for apps + docs; push submodule repos when changing `saas/`, `sites/bonairmedia.com/`, or `shared/python-webscraper/`.
-3. **Branches** — `main` on parent; feature branches `feature/<area>-<description>`.

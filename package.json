@@ -1,0 +1,27 @@
+{
+  "name": "bon-air-media",
+  "private": true,
+  "workspaces": [
+    "shared/ts-lib",
+    "apps/bon-air-local-ai/apps/web",
+    "apps/seren-legal/apps/web"
+  ],
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "dev:local-ai": "turbo dev --filter=@bon-air/local-ai-web",
+    "dev:seren": "turbo dev --filter=@bon-air/seren-legal-web",
+    "lint": "turbo lint",
+    "db:generate": "turbo db:generate",
+    "db:migrate": "turbo db:migrate",
+    "db:seed": "turbo db:seed",
+    "test:e2e": "turbo test:e2e"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.4"
+  },
+  "packageManager": "npm@10.9.0",
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,7 +1,0 @@
-Welcome to Seren Legal!
-
-Log in to see your pipeline, sample leads, and intake sessions from our demo seed — or clear them and start fresh.
-
-Next steps: customize pipeline stages, test the chat widget, and send a test SMS from Communications.
-
-Go to dashboard: https://app.serenlegal.ai

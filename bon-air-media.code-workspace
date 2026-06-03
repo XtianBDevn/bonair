@@ -5,7 +5,8 @@
     { "name": "seren-legal", "path": "apps/seren-legal" },
     { "name": "campaigns-saas", "path": "saas" },
     { "name": "bonairmedia.com", "path": "sites/bonairmedia.com" },
-    { "name": "python-webscraper", "path": "shared/python-webscraper" }
+    { "name": "python-webscraper", "path": "shared/python-webscraper" },
+    { "name": "ts-lib", "path": "shared/ts-lib" }
   ],
   "settings": {
     "files.exclude": {

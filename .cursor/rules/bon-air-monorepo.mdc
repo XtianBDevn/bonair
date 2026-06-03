@@ -1,36 +1,36 @@
 ---
-description: Bon Air Media monorepo layout, submodules, and GitHub workflow
+description: Bon Air Media monorepo — product submodules and workflow
 alwaysApply: true
 ---
 
-# Bon Air Media monorepo
+# Bon Air Media monorepo (`XtianBDevn/bonair`)
 
-You are working in the **bonair** umbrella repository (`XtianBDevn/bonair`).
+Every **product** is a **git submodule** with its own GitHub repo. Shared tooling lives in the umbrella repo.
 
-## Structure
+## Product submodules
 
-- `apps/bon-air-local-ai/` — Local SEO SaaS (Next.js, root `apps/web`)
-- `apps/seren-legal/` — Legal CRM (Next.js, root `apps/web`)
-- `saas/` — **submodule** → `bon-air-ai` (.NET + Next.js)
-- `sites/bonairmedia.com/` — **submodule** → `bonairmedia` (marketing site)
-- `shared/python-webscraper/` — **submodule** → `bon-air-media-scraper`
+| Path | Remote |
+|------|--------|
+| `saas/` | `bon-air-ai` |
+| `apps/bon-air-local-ai/` | `bon-air-local-ai` |
+| `apps/seren-legal/` | `seren-law` |
+| `sites/bonairmedia.com/` | `bonairmedia` |
+| `shared/python-webscraper/` | `bon-air-media-scraper` |
 
-Read `PROJECTS.md` for paths, remotes, and deploy targets.
+## Umbrella-only paths
+
+- `shared/ts-lib/` — `@bon-air/ts-lib` (npm workspace, not a submodule)
+- `package.json`, `turbo.json` — orchestrates both Next.js apps
+
+Read `PROJECTS.md` for ports, clone, and DB commands.
 
 ## Git rules
 
-- Do not commit `.env`, secrets, `node_modules/`, or `venv/`.
-- Changes under a submodule path require a commit **in that submodule repo**, then a parent commit that bumps the submodule SHA.
-- Prefer focused commits; match existing message style (`Add:`, `Fix:`, `Update:`).
+- Commit product changes **inside the submodule**, push that repo, then bump the pointer in `bonair`.
+- Never commit `.env`, secrets, `node_modules/`, or `venv/`.
 - Default branch: `main`.
 
-## Code conventions
+## Next.js apps
 
-- Next.js apps: TypeScript, App Router, Tailwind; env in `.env.local` (never commit).
-- Match naming and patterns in the nearest sibling files before adding abstractions.
-- Shared Python tooling: install with `pip install -e shared/python-webscraper` from app venvs.
-
-## When unsure
-
-- Check the project’s own `README.md` and `docs/` before inventing structure.
-- SaaS deployment: `saas/docs/DEPLOYMENT.md`.
+- Import shared code: `@bon-air/ts-lib` (client) and `@bon-air/ts-lib/server` (DB, Stripe, env).
+- App roots: `apps/*/apps/web` — Vercel root directory is `apps/web` within each product repo.

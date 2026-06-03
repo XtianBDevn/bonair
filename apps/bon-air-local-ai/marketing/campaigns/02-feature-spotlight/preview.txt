@@ -1,1 +1,0 @@
-Generate city + service pages with schema & FAQs

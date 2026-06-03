@@ -59,7 +59,7 @@ npm install
 # Run development server
 npm run dev
 
-# Open http://localhost:3000
+# Open http://localhost:3003
 ```
 
 ## Project-Specific Setup

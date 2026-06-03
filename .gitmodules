@@ -2,6 +2,14 @@
 	path = saas
 	url = https://github.com/XtianBDevn/bon-air-ai.git
 	branch = main
+[submodule "apps/bon-air-local-ai"]
+	path = apps/bon-air-local-ai
+	url = https://github.com/XtianBDevn/bon-air-local-ai.git
+	branch = main
+[submodule "apps/seren-legal"]
+	path = apps/seren-legal
+	url = https://github.com/XtianBDevn/seren-law.git
+	branch = main
 [submodule "sites/bonairmedia.com"]
 	path = sites/bonairmedia.com
 	url = https://github.com/XtianBDevn/bonairmedia.git

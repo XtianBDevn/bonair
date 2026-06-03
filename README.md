@@ -106,13 +106,16 @@ See **[PROJECTS.md](PROJECTS.md)** for the full index (paths, GitHub remotes, de
 
 Highlights:
 
-- **saas/** — Bon Air Campaigns ([bon-air-ai](https://github.com/XtianBDevn/bon-air-ai), submodule)
-- **apps/bon-air-local-ai/** — Local SEO / GBP product
-- **apps/seren-legal/** — Legal CRM / intake
-- **sites/bonairmedia.com/** — Company site ([bonairmedia](https://github.com/XtianBDevn/bonairmedia), submodule)
-- **shared/python-webscraper/** — Shared scraper ([bon-air-media-scraper](https://github.com/XtianBDevn/bon-air-media-scraper), submodule)
+All products are **git submodules** (separate repos). Clone with `--recurse-submodules`.
 
-GitHub umbrella repo: **[XtianBDevn/bonair](https://github.com/XtianBDevn/bonair)**
+- **saas/** — [bon-air-ai](https://github.com/XtianBDevn/bon-air-ai) (Campaigns)
+- **apps/bon-air-local-ai/** — [bon-air-local-ai](https://github.com/XtianBDevn/bon-air-local-ai)
+- **apps/seren-legal/** — [seren-law](https://github.com/XtianBDevn/seren-law)
+- **sites/bonairmedia.com/** — [bonairmedia](https://github.com/XtianBDevn/bonairmedia)
+- **shared/python-webscraper/** — [bon-air-media-scraper](https://github.com/XtianBDevn/bon-air-media-scraper)
+- **shared/ts-lib/** — `@bon-air/ts-lib` (lives in umbrella repo; npm workspace for both Next apps)
+
+Umbrella: **[XtianBDevn/bonair](https://github.com/XtianBDevn/bonair)** · See **[PROJECTS.md](PROJECTS.md)**
 
 ## Best Practices
 

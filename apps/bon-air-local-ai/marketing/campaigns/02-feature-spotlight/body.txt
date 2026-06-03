@@ -1,7 +1,0 @@
-Feature spotlight: GEO Page Generator
-
-Create pages for city_service, neighborhood, or service_area types. Each page includes JSON-ready content blocks your dev team or CMS can consume.
-
-Tip: Pair GEO pages with GBP posts on the same topic for a coordinated local visibility push.
-
-Generate your first GEO page: https://app.bonairlocal.ai

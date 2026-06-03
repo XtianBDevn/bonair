@@ -2,26 +2,37 @@
 
 ## Repository
 
-- **Root:** `bon-air-media` (local) → GitHub [`XtianBDevn/bonair`](https://github.com/XtianBDevn/bonair)
+- **Umbrella:** [`XtianBDevn/bonair`](https://github.com/XtianBDevn/bonair) (this folder)
 - **Index:** [PROJECTS.md](./PROJECTS.md)
 
-## Submodules
-
-Before editing `saas/`, `sites/bonairmedia.com/`, or `shared/python-webscraper/`:
+## Submodules (products)
 
 ```bash
 git submodule update --init --recursive
 ```
 
-After submodule changes, commit inside the submodule, then commit the updated pointer in the parent repo.
+| Submodule | Own repo |
+|-----------|----------|
+| `saas/` | bon-air-ai |
+| `apps/bon-air-local-ai/` | bon-air-local-ai |
+| `apps/seren-legal/` | seren-law |
+| `sites/bonairmedia.com/` | bonairmedia |
+| `shared/python-webscraper/` | bon-air-media-scraper |
+
+`shared/ts-lib/` is **not** a submodule — it ships with the umbrella repo and is consumed via npm workspaces.
+
+## Workflow
+
+1. Edit files inside the product submodule directory.
+2. `git commit` + `git push` in that submodule.
+3. In the umbrella repo: `git add <submodule-path>` and commit the new SHA.
 
 ## Safe defaults
 
-- Never read or commit API keys, Stripe secrets, or database URLs.
-- Run installs and dev servers from the project subdirectory listed in `PROJECTS.md`.
-- For Bon Air Campaigns (.NET), use `saas/docker-compose.yml` when testing API + DB locally.
+- Never commit secrets or `.env` files.
+- Run `npm install` from the umbrella root for Turborepo + `@bon-air/ts-lib`.
+- Per-product Postgres: see `infra/docker-compose.yml` in each app folder.
 
 ## Cursor
 
 - Rules: `.cursor/rules/bon-air-monorepo.mdc`
-- Optional: enable GitHub MCP in Cursor Settings for PR/issue workflows.

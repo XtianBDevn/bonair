@@ -10,8 +10,13 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+# Virtualenv site-packages only — bare lib/ ignores Next.js src/lib/ everywhere
+**/venv/lib/
+**/.venv/lib/
+**/env/lib/
+/ENV/lib/
+/lib/
+/lib64/
 parts/
 sdist/
 var/
@@ -29,6 +34,9 @@ venv/
 env/
 ENV/
 .venv
+
+# Turborepo
+.turbo/
 
 # Node
 node_modules/

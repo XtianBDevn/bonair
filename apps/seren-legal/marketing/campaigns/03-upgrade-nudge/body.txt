@@ -1,7 +1,0 @@
-Ready for Professional?
-
-Unlock automation workflows like missed-call text-back (Twilio required for live SMS).
-
-Questions about HIPAA-ready patterns or multi-office setup? Reply to this email.
-
-Upgrade plan: https://app.serenlegal.ai
