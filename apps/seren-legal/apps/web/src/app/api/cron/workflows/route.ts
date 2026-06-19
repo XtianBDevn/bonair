@@ -3,10 +3,15 @@ import { processDueWorkflowExecutions } from "@/lib/workflow-executor";
 import { upsertDailySnapshot } from "@/lib/analytics";
 import { prisma } from "@/lib/db";
 
+/**
+ * Authorize cron requests. Fail closed — always require CRON_SECRET,
+ * even in development.
+ */
 function authorizeCron(request: NextRequest): boolean {
   const secret = process.env.CRON_SECRET?.trim();
   if (!secret) {
-    return process.env.NODE_ENV !== "production";
+    console.error("[cron] CRON_SECRET not configured — rejecting request");
+    return false;
   }
   const header = request.headers.get("authorization");
   return header === `Bearer ${secret}`;
