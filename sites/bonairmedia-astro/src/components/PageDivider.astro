@@ -1,0 +1,25 @@
+---
+interface Props {
+  colors: string[];
+}
+
+const { colors } = Astro.props;
+const COLS = 12;
+const ROWS = 4;
+// a staircase of lit cells per panel, offset so the four panels don't line up
+const lit = (panel: number, c: number, r: number) => (c + panel * 3 + r * 2) % 7 < 2;
+---
+
+<div class="divider" aria-hidden="true">
+  {
+    colors.map((bg, p) => (
+      <div class="divider-panel" style={`background:${bg};--on:${colors[(p + 1) % colors.length]}`}>
+        {Array.from({ length: COLS * ROWS }, (_, i) => {
+          const c = i % COLS;
+          const r = Math.floor(i / COLS);
+          return <i class:list={{ on: lit(p, c, r) }} style={`animation-delay:${(c + r) * 90}ms`} />;
+        })}
+      </div>
+    ))
+  }
+</div>

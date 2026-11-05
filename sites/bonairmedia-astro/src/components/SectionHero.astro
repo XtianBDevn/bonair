@@ -1,0 +1,40 @@
+---
+import type { Expression } from '../mascot/expressions';
+import { linkAttrs, type Accent, type Action } from './types';
+
+interface Props {
+  id: string;
+  slug: string;
+  title: string;
+  /** accent name: coral | lavender | sun | magenta | plum */
+  color: Accent;
+  expression?: Expression;
+  lead: { slug?: string; body: string; primary?: Action; secondary?: Action; note?: string };
+}
+
+const { id, slug, title, color, expression, lead } = Astro.props;
+---
+
+<header id={id} class:list={['sec-hero', `acc-${color}`]} data-expression={expression} aria-labelledby={`${id}-title`}>
+  <div class="cell cell--title">
+    <p class="slug"><span data-type>{slug}</span><i class="slug-square"></i></p>
+    <button type="button" class="share" data-share={id}>
+      <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M7.78 2.97a.75.75 0 0 1 0 1.06L6.31 5.5h2.94a4.25 4.25 0 0 1 0 8.5H8.5a.75.75 0 0 1 0-1.5h.75a2.75 2.75 0 0 0 0-5.5H6.31l1.47 1.47a.75.75 0 1 1-1.06 1.06L3.97 6.78a.75.75 0 0 1 0-1.06l2.75-2.75a.75.75 0 0 1 1.06 0Z"/></svg>
+      <span>Share</span>
+    </button>
+    <h2 id={`${id}-title`}>{title}</h2>
+  </div>
+  <div class="cell cell--lead">
+    {lead.slug && <p class="slug slug--small"><span>{lead.slug}</span></p>}
+    <p class="lead">{lead.body}</p>
+    {
+      (lead.primary || lead.secondary) && (
+        <div class="actions">
+          {lead.primary && <a class="btn-c" href={lead.primary.href} {...linkAttrs(lead.primary.href)}>{lead.primary.label}</a>}
+          {lead.secondary && <a class="btn-g" href={lead.secondary.href} {...linkAttrs(lead.secondary.href)}>{lead.secondary.label}</a>}
+        </div>
+      )
+    }
+    {lead.note && <p class="note">{lead.note}</p>}
+  </div>
+</header>

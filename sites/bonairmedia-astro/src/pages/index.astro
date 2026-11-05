@@ -1,0 +1,443 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHero from '../components/SectionHero.astro';
+import River from '../components/River.astro';
+import DemoWindow from '../components/DemoWindow.astro';
+import PageDivider from '../components/PageDivider.astro';
+import PixelPoe from '../components/PixelPoe.astro';
+import PoeStory from '../components/PoeStory.astro';
+import AvatarDock from '../mascot/AvatarDock';
+import AnimeAvatar from '../mascot/AnimeAvatar';
+import MoodDemo from '../mascot/MoodDemo';
+import { SITE } from '../lib/site';
+import '../styles/recap.css';
+
+const NAV = [
+  { id: 'studio', label: 'Studio', accent: 'coral' },
+  { id: 'ventures', label: 'Ventures', accent: 'lavender' },
+  { id: 'river-city-rumble', label: 'River City Rumble', accent: 'sun' },
+  { id: 'journal', label: 'Journal', accent: 'magenta' },
+];
+
+const DIVIDER = ['var(--coral)', 'var(--lavender)', 'var(--sun)', 'var(--magenta)'];
+
+/** Seeded pixel field for the hero banner — denser at the edges, clear in the middle for the avatar. */
+const palette = ['#ff6f61', '#e0457b', '#9b7fe6', '#ffb547', '#ff9a8b', '#6c3fa8'];
+let seed = 7;
+const rand = () => ((seed = (seed * 9301 + 49297) % 233280) / 233280);
+const PIXELS = Array.from({ length: 16 * 9 }, (_, i) => {
+  const col = i % 16;
+  const edge = col < 4 || col > 11;
+  return rand() < (edge ? 0.42 : 0.1) ? { color: palette[Math.floor(rand() * palette.length)], delay: Math.floor(rand() * 4000) } : null;
+});
+const BAND = Array.from({ length: 30 }, (_, i) => (i % 7 === 0 || i % 5 === 2 ? 'on' : i % 9 === 4 ? 'alt' : ''));
+---
+
+<Base>
+  <AvatarDock client:only="react" slotSelector="#avatar-slot" />
+
+  <div class="column">
+    <header class="top" data-expression="happy">
+      <div class="cell cell--title">
+        <p class="slug"><span data-type>bon-air-media-2026</span></p>
+        <h1>What’s new at Bon Air Media</h1>
+      </div>
+      <div class="cell cell--lead">
+        <p class="lead">Richmond web design, local SEO and AI automation — plus the products we build between client work.</p>
+      </div>
+    </header>
+
+    <div class="banner" data-expression="happy">
+      <div class="pixels" aria-hidden="true">
+        {PIXELS.map((p) => (p ? <i class="on" style={`background:${p.color};animation-delay:${p.delay}ms`} /> : <i />))}
+      </div>
+      <div id="avatar-slot" class="slot"></div>
+    </div>
+  </div>
+
+  <nav class="anchors" aria-label="Sections">
+    <div class="anchors-inner">
+      {NAV.map((n) => <a href={`#${n.id}`} class={`acc-${n.accent}`} data-spy={n.id}>{n.label}</a>)}
+      <a href="/blog" class="anchors-all">All journal posts ↗</a>
+    </div>
+  </nav>
+
+  <div class="column">
+    <!-- studio() -->
+    <SectionHero
+      id="studio"
+      slug="studio()"
+      color="coral"
+      expression="focused"
+      title="Websites that work as hard as you do"
+      lead={{
+        slug: 'custom-builds',
+        body: 'Hand-built WordPress themes and fast static-first Astro and Next.js sites — accessible, quick to load and easy for your team to update.',
+        primary: { label: 'See our work', href: '/work' },
+        secondary: { label: 'Services', href: '/services' },
+        note: 'Every build ships with schema, local SEO and a Lighthouse budget.',
+      }}
+    />
+    <DemoWindow title="bam — new-site" color="coral" media>
+      <div class="term">
+        <p><b>$</b> bam new-site --stack astro --cms wordpress</p>
+        <p class="dim">  scaffolding theme…</p>
+        <p class="ok">✓ theme scaffolded</p>
+        <p class="ok">✓ schema + local SEO wired</p>
+        <p class="ok">✓ lighthouse budget set (perf ≥ 95)</p>
+        <p><b>$</b> bam deploy --prod</p>
+      </div>
+    </DemoWindow>
+    <River
+      slug="local-seo"
+      color="coral"
+      expression="curious"
+      title="Get found from Bon Air to Shockoe Bottom"
+      body="Neighborhood pages, Google Business Profile tune-ups and structured data so nearby customers find you first."
+      primary={{ label: 'Local SEO', href: '/services' }}
+      secondary={{ label: 'Read the playbook', href: '/blog' }}
+      windowTitle="search — richmond, va"
+    >
+      <div class="serp">
+        <div class="q">🔍 <span>plumber near bon air va</span></div>
+        <div class="r">
+          <small>your-business.com</small>
+          <strong>Your Business — Richmond, VA</strong>
+          <em>★★★★★ · Open now · Bon Air</em>
+        </div>
+        <div class="r">
+          <small>your-business.com › service-areas › midlothian</small>
+          <strong>Service areas: Midlothian & Chesterfield</strong>
+        </div>
+      </div>
+    </River>
+    <River
+      slug="ai-automation"
+      color="coral"
+      expression="thinking"
+      title="Automation that answers the phone (and the inbox)"
+      body="Intake assistants, lead routing and follow-ups that run on their own, so nothing slips while you’re on the job."
+      primary={{ label: 'AI services', href: '/services' }}
+      windowTitle="inbox — automations"
+    >
+      <div class="chat">
+        <p class="in">New lead: “Need a quote for a site refresh.”</p>
+        <p class="out">Thanks! I can get you a quote today — what’s your current site?</p>
+        <p class="in">mybakery-rva.com</p>
+        <p class="out">Got it. Call booked Thu 10am · added to CRM ✓</p>
+      </div>
+    </River>
+    <River
+      slug="characters-that-react"
+      color="coral"
+      expression="excited"
+      title="Characters that react as you read"
+      body="Mascots with real personalities — they blink, look around and change expression as visitors scroll. Like the one following you down this page."
+      primary={{ label: 'Start a character', href: '/contact?topic=mascot' }}
+      note="Try the mood buttons, or pause the demo."
+      windowTitle="mascot — moods"
+      tall
+    >
+      <MoodDemo client:visible />
+    </River>
+  </div>
+
+  <PageDivider colors={DIVIDER} />
+
+  <div class="column">
+    <!-- ventures() -->
+    <SectionHero
+      id="ventures"
+      slug="ventures()"
+      color="lavender"
+      expression="curious"
+      title="Products we build between client work"
+      lead={{
+        slug: 'bam-labs',
+        body: 'When we’re not shipping client sites, we build our own — small, local, and a little weird. Each one is a test bed for what we bring to clients.',
+        primary: { label: 'Meet Poe', href: '#river-city-rumble' },
+        secondary: { label: 'Read the journal', href: '/blog' },
+      }}
+    />
+    <DemoWindow title="bam — labs" color="lavender" media>
+      <div class="shelf">
+        <a class="shelf-card" href="#river-city-rumble">
+          <div class="shelf-art"><PixelPoe label="Poe, River City Rumble’s host" /></div>
+          <strong>River City Rumble</strong>
+          <small>Weekly Richmond trivia, hosted by a raven</small>
+        </a>
+        <a class="shelf-card" href="/blog">
+          <div class="shelf-art post"><div class="cover" style="height:100%;width:100%"></div></div>
+          <strong>Bon Air Journal</strong>
+          <small>Build notes and local SEO playbooks</small>
+        </a>
+      </div>
+    </DemoWindow>
+  </div>
+
+  <PageDivider colors={[...DIVIDER].reverse()} />
+
+  <div class="column">
+    <!-- river-city-rumble() -->
+    <SectionHero
+      id="river-city-rumble"
+      slug="river-city-rumble()"
+      color="sun"
+      expression="excited"
+      title="Turning ads into part of the game"
+      lead={{
+        slug: 'poe.tell()',
+        body: 'Poe, the game’s raven host, explains how Christian came up with a trivia format that puts local sponsors inside the game — scroll to hear it.',
+        primary: { label: 'Play this week’s Rumble', href: SITE.rumbleUrl },
+        secondary: { label: 'Sponsor a round', href: '/contact?topic=river-city-rumble-sponsor' },
+      }}
+    />
+    <div class="poe-cell">
+      <PoeStory />
+    </div>
+    <River
+      slug="sponsor-moments"
+      color="sun"
+      expression="focused"
+      title="A sponsor in every question"
+      body="Each of the 20 weekly questions opens with a sponsor reveal, then the countdown — the moment players are paying the most attention."
+      primary={{ label: 'Sponsor a round', href: '/contact?topic=river-city-rumble-sponsor' }}
+      windowTitle="rivercityrumble.com — question 7"
+    >
+      <div class="quiz">
+        <div class="sponsor">Question 7 · presented by <em>Your business here</em></div>
+        <div class="q">Which Richmond neighborhood is home to the Edgar Allan Poe Museum?</div>
+        <div class="answers"><span>The Fan</span><span class="pick">Shockoe Bottom</span><span>Church Hill</span><span>Carytown</span></div>
+        <div class="timer" aria-hidden="true"><b></b></div>
+      </div>
+    </River>
+    <River
+      slug="weekly-rumble"
+      color="sun"
+      expression="happy"
+      title="One shot a week, one leaderboard for the city"
+      body="Twenty new Richmond questions drop every week. Players get a single run against the clock, and Poe keeps score — and receipts."
+      primary={{ label: 'Play now', href: SITE.rumbleUrl }}
+      secondary={{ label: 'How it works', href: '#river-city-rumble' }}
+      windowTitle="rivercityrumble.com — leaderboard (sample)"
+    >
+      <div class="quiz-host">
+        <PixelPoe label="Poe announcing the leaderboard" />
+        <p>THIS WEEK'S TOP RAVENS…</p>
+      </div>
+      <div class="leader">
+        <div><span>1 · CarytownCrusher</span><span>2,140</span></div>
+        <div><span>2 · ShockoeSleuth</span><span>1,980</span></div>
+        <div><span>3 · FanDistrictFan</span><span>1,905</span></div>
+      </div>
+    </River>
+  </div>
+
+  <PageDivider colors={DIVIDER} />
+
+  <div class="column">
+    <!-- journal() -->
+    <SectionHero
+      id="journal"
+      slug="journal()"
+      color="magenta"
+      expression="thinking"
+      title="Notes from the Bon Air Journal"
+      lead={{
+        body: 'How we build, what we ship, and what we learned doing it — written for Richmond business owners and fellow builders.',
+        primary: { label: 'Read the journal', href: '/blog' },
+      }}
+    />
+    <DemoWindow title="bonairmedia.com/blog — preview" color="magenta" media>
+      <div class="post">
+        <div class="cover"></div>
+        <h4>Building a trivia game that sponsors actually want</h4>
+        <i></i><i style="width:85%"></i><i style="width:60%"></i>
+      </div>
+    </DemoWindow>
+
+    <!-- stay-tuned() -->
+    <div class="band" aria-hidden="true">
+      <div class="band-pixels">{BAND.map((c) => <i class={c} />)}</div>
+      <div class="band-avatar"><AnimeAvatar client:visible expression="wink" /></div>
+      <PixelPoe label="Poe waving goodbye" />
+      <div class="band-pixels">{[...BAND].reverse().map((c) => <i class={c} />)}</div>
+    </div>
+    <SectionHero
+      id="contact"
+      slug="stay-tuned()"
+      color="plum"
+      expression="wink"
+      title="Let’s build something"
+      lead={{
+        body: `Tell us what you’re working on. Call ${SITE.telephoneDisplay} or email ${SITE.email}.`,
+        primary: { label: 'Start a project', href: '/contact' },
+        secondary: { label: 'View plans', href: '/plans' },
+      }}
+    />
+  </div>
+</Base>
+
+<script>
+  import { initExpressionScroll } from '../mascot/expressions';
+  initExpressionScroll();
+
+  // Slugs type themselves in, terminal-style, the first time they scroll into view.
+  const typed = document.querySelectorAll<HTMLElement>('[data-type]');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const typeIO = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      typeIO.unobserve(e.target);
+      const el = e.target as HTMLElement;
+      const text = el.dataset.full ?? '';
+      const slug = el.closest('.slug');
+      let i = 0;
+      slug?.classList.add('is-typing');
+      const id = window.setInterval(() => {
+        el.textContent = text.slice(0, ++i);
+        if (i >= text.length) {
+          window.clearInterval(id);
+          slug?.classList.remove('is-typing');
+        }
+      }, 45);
+    });
+  });
+  typed.forEach((el) => {
+    if (reduced) return;
+    el.dataset.full = el.textContent ?? '';
+    el.textContent = '';
+    typeIO.observe(el);
+  });
+
+  // Section tabs fill with their accent while their section is on screen.
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-spy]'));
+  const sections = links.map((a) => document.getElementById(a.dataset.spy!)).filter(Boolean) as HTMLElement[];
+  const spy = () => {
+    const line = window.innerHeight * 0.35;
+    let current: string | undefined;
+    sections.forEach((s) => {
+      if (s.getBoundingClientRect().top <= line) current = s.id;
+    });
+    // past the last tracked section (the contact block) nothing is active
+    const contact = document.getElementById('contact');
+    if (contact && contact.getBoundingClientRect().top <= line) current = undefined;
+    links.forEach((a) => a.classList.toggle('is-active', a.dataset.spy === current));
+  };
+  window.addEventListener('scroll', spy, { passive: true });
+  spy();
+
+  document.querySelectorAll<HTMLButtonElement>('[data-share]').forEach((btn) => {
+    const label = btn.querySelector('span')!;
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(`${location.origin}${location.pathname}#${btn.dataset.share}`);
+        label.textContent = 'Link copied';
+        setTimeout(() => (label.textContent = 'Share'), 1500);
+      } catch {
+        /* clipboard blocked — the anchor link still works */
+      }
+    });
+  });
+</script>
+
+<style>
+  .top .cell--title {
+    padding-top: calc(var(--header-h) + 2rem);
+  }
+
+  .banner {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-top: 1px solid var(--rule);
+    overflow: hidden;
+    /* sunset sky behind the pixel grid */
+    background:
+      linear-gradient(var(--rule) 1px, transparent 1px) 0 0 / calc(100% / 16) calc(100% / 9),
+      linear-gradient(90deg, var(--rule) 1px, transparent 1px) 0 0 / calc(100% / 16) calc(100% / 9),
+      var(--banner);
+  }
+  @media (max-width: 640px) {
+    .banner {
+      aspect-ratio: 4 / 5;
+    }
+  }
+  .pixels {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(16, 1fr);
+    grid-template-rows: repeat(9, 1fr);
+  }
+  .pixels .on {
+    animation: shimmer 4s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    50% {
+      opacity: 0.55;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pixels .on {
+      animation: none;
+    }
+  }
+  .slot {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    /* square that never outgrows the banner, whichever side is shorter */
+    height: min(100%, 520px);
+    aspect-ratio: 1;
+    max-width: 92%;
+  }
+
+  .anchors {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 30;
+    background: var(--paper);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .anchors-inner {
+    max-width: 802px;
+    margin: 0 auto;
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .anchors a {
+    flex: 0 0 auto;
+    padding: 1.4rem 1.1rem 0.9rem;
+    border-left: 4px solid var(--c, var(--rule));
+    font: 500 0.88rem/1 'Outfit', sans-serif;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background 0.2s,
+      color 0.2s;
+  }
+  .anchors a:hover {
+    background: var(--paper-2);
+  }
+  .anchors a.is-active {
+    background: var(--c);
+    color: var(--c-ink);
+  }
+  .anchors .anchors-all {
+    margin-left: auto;
+    border-left-color: var(--rule);
+  }
+
+  .poe-cell {
+    padding: 0 32px;
+    border-top: 1px solid var(--rule);
+  }
+  @media (max-width: 640px) {
+    .poe-cell {
+      padding: 0 12px;
+    }
+  }
+</style>

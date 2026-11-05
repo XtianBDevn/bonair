@@ -1,0 +1,44 @@
+---
+import type { Expression } from '../mascot/expressions';
+import DemoWindow from './DemoWindow.astro';
+import { linkAttrs, type Accent, type Action } from './types';
+
+interface Props {
+  slug: string;
+  title: string;
+  body: string;
+  /** accent name: coral | lavender | sun | magenta | plum */
+  color: Accent;
+  expression: Expression;
+  primary?: Action;
+  secondary?: Action;
+  note?: string;
+  windowTitle: string;
+  tall?: boolean;
+}
+
+const { slug, title, body, color, expression, primary, secondary, note, windowTitle, tall } = Astro.props;
+---
+
+<article class:list={['river', `acc-${color}`]} data-expression={expression}>
+  <div class="river-text">
+    <div class="river-slugrow">
+      <p class="slug slug--small"><span data-type>{slug}</span></p>
+      <span aria-hidden="true"></span>
+    </div>
+    <div class="river-copy">
+      <h3>{title}</h3>
+      <p class="lead">{body}</p>
+      {
+        (primary || secondary) && (
+          <div class="actions">
+            {primary && <a class="btn-c" href={primary.href} {...linkAttrs(primary.href)}>{primary.label}</a>}
+            {secondary && <a class="btn-g" href={secondary.href} {...linkAttrs(secondary.href)}>{secondary.label}</a>}
+          </div>
+        )
+      }
+      {note && <p class="note">{note}</p>}
+    </div>
+  </div>
+  <DemoWindow title={windowTitle} color={color} tall={tall}><slot /></DemoWindow>
+</article>

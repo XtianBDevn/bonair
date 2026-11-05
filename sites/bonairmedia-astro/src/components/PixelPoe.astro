@@ -1,0 +1,29 @@
+---
+interface Props {
+  class?: string;
+  label?: string;
+}
+
+const { class: className, label = 'Poe, a pixel-art raven' } = Astro.props;
+---
+
+<canvas class:list={['pixel-poe', className]} data-pixel-poe width="64" height="64" role="img" aria-label={label}></canvas>
+
+<script>
+  import { mountPixelPoe } from '../mascot/pixelPoe';
+
+  // Each sprite only animates while near the viewport.
+  document.querySelectorAll<HTMLCanvasElement>('[data-pixel-poe]').forEach((canvas) => {
+    let stop: (() => void) | null = null;
+    new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting && !stop) stop = mountPixelPoe(canvas);
+        else if (!e.isIntersecting && stop) {
+          stop();
+          stop = null;
+        }
+      },
+      { rootMargin: '50% 0px' },
+    ).observe(canvas);
+  });
+</script>

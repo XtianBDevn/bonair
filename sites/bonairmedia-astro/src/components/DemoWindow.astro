@@ -1,0 +1,51 @@
+---
+import type { Accent } from './types';
+
+interface Props {
+  title: string;
+  /** accent name: coral | lavender | sun | magenta | plum */
+  color: Accent;
+  tall?: boolean;
+  /** media variant: shorter stage directly under a section header */
+  media?: boolean;
+}
+
+const { title, color, tall, media } = Astro.props;
+---
+
+<div class:list={['demo-stage', 'grid-paper', `acc-${color}`, { 'demo-stage--tall': tall, 'demo-stage--media': media }]}>
+  <div class="demo-window">
+    <div class="demo-bar">
+      <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path fill="currentColor" d="M0 2.75C0 1.78.78 1 1.75 1h12.5c.97 0 1.75.78 1.75 1.75v10.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25Zm1.75-.25a.25.25 0 0 0-.25.25v10.5c0 .14.11.25.25.25h12.5a.25.25 0 0 0 .25-.25V2.75a.25.25 0 0 0-.25-.25ZM7 11a.75.75 0 0 1 0-1.5h3.5a.75.75 0 0 1 0 1.5Zm-3.22-.47a.75.75 0 0 1 0-1.06L5.25 8 3.78 6.53a.75.75 0 0 1 1.06-1.06l2 2a.75.75 0 0 1 0 1.06l-2 2a.75.75 0 0 1-1.06 0Z"/></svg>
+      <span>{title}</span>
+    </div>
+    <div class="demo-body"><slot /></div>
+  </div>
+  <button type="button" class="demo-play" aria-label="Pause animation" aria-pressed="false">
+    <svg class="i-pause" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M4.5 2a.5.5 0 0 0-.5.5v11c0 .28.22.5.5.5h2a.5.5 0 0 0 .5-.5v-11a.5.5 0 0 0-.5-.5Zm5 0a.5.5 0 0 0-.5.5v11c0 .28.22.5.5.5h2a.5.5 0 0 0 .5-.5v-11a.5.5 0 0 0-.5-.5Z"/></svg>
+    <svg class="i-play" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M4 2.8v10.4a.8.8 0 0 0 1.2.7l8.6-5.2a.8.8 0 0 0 0-1.4L5.2 2.1A.8.8 0 0 0 4 2.8Z"/></svg>
+  </button>
+</div>
+
+<script>
+  // Demos animate only while on screen, and the corner button pauses them.
+  const stages = document.querySelectorAll<HTMLElement>('.demo-stage');
+  const io = new IntersectionObserver((entries) =>
+    entries.forEach((e) => (e.target as HTMLElement).toggleAttribute('data-inview', e.isIntersecting)),
+  );
+  stages.forEach((stage) => {
+    io.observe(stage);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) stage.setAttribute('data-paused', '');
+    const btn = stage.querySelector<HTMLButtonElement>('.demo-play')!;
+    const sync = () => {
+      const paused = stage.hasAttribute('data-paused');
+      btn.setAttribute('aria-pressed', String(paused));
+      btn.setAttribute('aria-label', paused ? 'Play animation' : 'Pause animation');
+    };
+    sync();
+    btn.addEventListener('click', () => {
+      stage.toggleAttribute('data-paused');
+      sync();
+    });
+  });
+</script>

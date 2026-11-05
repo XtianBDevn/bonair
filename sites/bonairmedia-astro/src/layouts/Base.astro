@@ -1,0 +1,99 @@
+---
+import '../styles/global.css';
+import { SITE } from '../lib/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = SITE.title, description = SITE.description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, SITE.url);
+
+const FOOTER = [
+  {
+    title: 'Studio',
+    links: [
+      { label: 'Web design', href: '/services' },
+      { label: 'Local SEO', href: '/services' },
+      { label: 'AI automation', href: '/services' },
+      { label: 'Our work', href: '/work' },
+    ],
+  },
+  {
+    title: 'Ventures',
+    links: [
+      { label: 'River City Rumble', href: SITE.rumbleUrl },
+      { label: 'Bon Air Journal', href: '/blog' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { label: 'About', href: '/about' },
+      { label: 'Plans', href: '/plans' },
+      { label: 'Contact', href: '/contact' },
+    ],
+  },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to main content</a>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Bon Air Media home">
+        <span class="brand-mark">B!</span>
+        <span>Bon Air Media</span>
+      </a>
+      <a class="header-cta" href="/contact">Start a project</a>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="footer-cta">
+        <p>Get the Bon Air Journal — build notes and local SEO tips, a couple of times a month.</p>
+        <a class="btn" href="/blog">Read the journal</a>
+      </div>
+      <div class="footer-cols">
+        {
+          FOOTER.map((col) => (
+            <div>
+              <h2>{col.title}</h2>
+              <ul>
+                {col.links.map((l) => (
+                  <li>
+                    <a href={l.href}>{l.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+      <p class="footer-legal">
+        © {new Date().getFullYear()} {SITE.name} · Richmond, VA · <a href={`tel:${SITE.telephone}`}>{SITE.telephoneDisplay}</a> ·
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      </p>
+    </footer>
+  </body>
+</html>

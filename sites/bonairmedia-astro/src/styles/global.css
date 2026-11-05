@@ -1,0 +1,310 @@
+/* Anime sunset: coral → magenta → lavender over peach cream; dusk indigo in dark mode */
+:root {
+  --ink: #2b1838;
+  --paper: #fff7f1;
+  --paper-2: #ffece4;
+  --card: #fffbf8;
+  --muted: #6e5677;
+  --rule: rgba(43, 24, 56, 0.12);
+  --grid: rgba(43, 24, 56, 0.05);
+  --coral: #ff6f61;
+  --magenta: #e0457b;
+  --lavender: #9b7fe6;
+  --sun: #ffb547;
+  --plum: #6c3fa8;
+  --on-accent: #fff7f1;
+  --bubble-bg: #2b1838;
+  --bubble-fg: #fff7f1;
+  --sponsor-bg: #ffe1ec;
+  --shadow: rgba(108, 63, 168, 0.35);
+  --banner: linear-gradient(180deg, #ffd6c4 0%, #ffe3ec 55%, #efe4ff 100%);
+  --header-h: 60px;
+  --col: 820px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #fff1ea;
+    --paper: #1c1430;
+    --paper-2: #251b3d;
+    --card: #251b3d;
+    --muted: #cdb8d6;
+    --rule: rgba(255, 241, 234, 0.14);
+    --grid: rgba(255, 241, 234, 0.05);
+    --plum: #8b5cf6;
+    --bubble-bg: #0f0a1c;
+    --sponsor-bg: #3a2547;
+    --shadow: rgba(0, 0, 0, 0.5);
+    --banner: linear-gradient(180deg, #4a2150 0%, #2e1b4a 55%, #1c1430 100%);
+    color-scheme: dark;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Outfit', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+.skip {
+  position: absolute;
+  left: -999px;
+}
+.skip:focus {
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.5rem 0.8rem;
+}
+
+/* ---------- chrome ---------- */
+
+.site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  height: var(--header-h);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.25rem;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--coral);
+  color: #fff;
+  font: 400 1.2rem/1 'Bebas Neue', sans-serif;
+}
+
+.header-cta,
+.btn {
+  font: 600 0.9rem/1 'Outfit', sans-serif;
+  padding: 0.75rem 1.1rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+  border: 1px solid var(--ink);
+  white-space: nowrap;
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--rule);
+}
+
+.site-footer {
+  border-top: 1px solid var(--rule);
+  background: var(--paper-2);
+  padding: 3rem 1.5rem 7rem;
+}
+
+.site-footer > * {
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.footer-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.footer-cta p {
+  margin: 0;
+  max-width: 34rem;
+  font-size: 1.05rem;
+}
+
+.footer-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+.footer-cols h2 {
+  margin: 0 0 0.9rem;
+  font: 600 0.72rem/1 'JetBrains Mono', monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.footer-cols ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.footer-cols a,
+.footer-legal a {
+  text-decoration: none;
+}
+
+.footer-cols a:hover,
+.footer-legal a:hover {
+  text-decoration: underline;
+}
+
+.footer-legal {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ---------- recap scaffold ---------- */
+
+.column {
+  max-width: var(--col);
+  margin: 0 auto;
+  border-left: 1px solid var(--rule);
+  border-right: 1px solid var(--rule);
+}
+
+@media (max-width: 860px) {
+  .column {
+    margin: 0 16px;
+  }
+}
+
+.slug {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font: 400 0.8rem/1 'JetBrains Mono', monospace;
+  color: var(--muted);
+  margin: 0 0 1.6rem;
+}
+
+.slug i {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+}
+
+.grid-paper {
+  background-color: var(--paper-2);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* ---------- avatar island ---------- */
+
+.avatar-floating {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
+  pointer-events: none;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.avatar-mood {
+  position: fixed;
+  right: calc(16px + 84px);
+  bottom: 14px;
+  z-index: 41;
+  pointer-events: none;
+  transform: translateX(50%) scale(0.6);
+  opacity: 0;
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
+  font: 600 0.7rem/1 'JetBrains Mono', monospace;
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  white-space: nowrap;
+}
+
+.avatar-mood.is-docked {
+  opacity: 1;
+  transform: translateX(50%) scale(1);
+}
+
+@media (max-width: 639px) {
+  .avatar-mood {
+    right: calc(16px + 56px);
+  }
+}
+
+/* anime avatar emotes: one per mood, popped in by data-mood */
+.anime-avatar .emote {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.25s;
+}
+.anime-avatar[data-mood='surprised'] .emote--surprised,
+.anime-avatar[data-mood='excited'] .emote--excited,
+.anime-avatar[data-mood='thinking'] .emote--thinking,
+.anime-avatar[data-mood='focused'] .emote--focused,
+.anime-avatar[data-mood='wink'] .emote--wink {
+  opacity: 1;
+  animation: emote-pop 0.9s ease-in-out infinite alternate;
+}
+@keyframes emote-pop {
+  to {
+    scale: 1.12;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .anime-avatar .emote {
+    animation: none !important;
+  }
+}
